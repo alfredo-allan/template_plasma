@@ -27,13 +27,8 @@ export default function Header() {
       {/* BACKGROUND */}
       <div className="absolute inset-0">
         {/* DESKTOP */}
-        <div className="hidden md:block w-full h-full bg-cover bg-center" style={{ backgroundImage: 'url(/banner_content_header.png)' }} />
 
         {/* MOBILE */}
-        <div
-          className="block md:hidden w-full h-full bg-contain bg-top bg-no-repeat"
-          style={{ backgroundImage: 'url(/mobile_banner_content_header.png)' }}
-        />
 
         {/* OVERLAY */}
         <div className="absolute inset-0 bg-black/40" />

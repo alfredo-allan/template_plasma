@@ -6,21 +6,10 @@ interface VideoLoadingProps {
   show?: boolean
   onComplete?: () => void
   zoom?: number
-  boxSize?: 'small' | 'medium' | 'large' | 'fullscreen' | 'custom'
-  customWidth?: string
-  customHeight?: string
-  radius?: number
+  fallbackDuration?: number
 }
 
-export default function VideoLoading({
-  show = true,
-  onComplete,
-  zoom = 1.3,
-  boxSize = 'medium',
-  customWidth = '320px',
-  customHeight = '480px',
-  radius = 120
-}: VideoLoadingProps) {
+export default function VideoLoading({ show = true, onComplete, zoom = 0.5, fallbackDuration = 6000 }: VideoLoadingProps) {
   const [visible, setVisible] = useState(show)
   const videoRef = useRef<HTMLVideoElement>(null)
 
@@ -33,11 +22,13 @@ export default function VideoLoading({
     setVisible(true)
 
     const timer = setTimeout(() => {
-      videoRef.current?.currentTime && (videoRef.current.currentTime = 0)
-      videoRef.current?.play().catch(() => {
-        setTimeout(handleComplete, 6000)
+      if (!videoRef.current) return
+
+      videoRef.current.currentTime = 0
+      videoRef.current.play().catch(() => {
+        setTimeout(handleComplete, fallbackDuration)
       })
-    }, 100)
+    }, 80)
 
     return () => {
       clearTimeout(timer)
@@ -50,50 +41,30 @@ export default function VideoLoading({
     onComplete?.()
   }
 
-  const getBoxSize = () => {
-    switch (boxSize) {
-      case 'small':
-        return 'w-46 h-56' // ↓ menor
-      case 'medium':
-        return 'w-[200px] h-[260px]' // ↓ menor
-      case 'large':
-        return 'w-[240px] h-[240px]' // ↓ menor
-      case 'fullscreen':
-        return 'w-full h-full'
-      case 'custom':
-        return ''
-      default:
-        return 'w-[280px] h-[280px]'
-    }
-  }
-
   if (!visible) return null
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center">
-      {/* BOX DO VÍDEO */}
-      <div
-        className={`
-      relative bg-black overflow-hidden rounded-full
-      ${boxSize !== 'custom' ? getBoxSize() : ''}
-    `}
-        style={boxSize === 'custom' ? { width: customWidth, height: customHeight } : undefined}>
-        {/* VÍDEO */}
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          onEnded={handleComplete}
-          onError={() => setTimeout(handleComplete, 6000)}
-          className="absolute inset-0 w-full h-full object-contain"
-          style={{
-            transform: `scale(${zoom})`,
-            transformOrigin: 'center'
-          }}>
-          <source src="/loading_plasma.mp4" type="video/mp4" />
-        </video>
-      </div>
+      <video
+        ref={videoRef}
+        autoPlay
+        muted
+        playsInline
+        onEnded={handleComplete}
+        onError={() => setTimeout(handleComplete, fallbackDuration)}
+        className="
+          object-contain
+          w-[200px] h-[280px]
+          sm:w-[240px] sm:h-[340px]
+          md:w-[300px] md:h-[420px]
+          lg:w-[300px] lg:h-[420px]
+rounded-full        "
+        style={{
+          transform: `scale(${zoom})`,
+          transformOrigin: 'center'
+        }}>
+        <source src="/loading_plasma.mp4" type="video/mp4" />
+      </video>
     </div>
   )
 }
