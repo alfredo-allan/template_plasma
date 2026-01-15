@@ -9,7 +9,7 @@ interface VideoLoadingProps {
   fallbackDuration?: number
 }
 
-export default function VideoLoading({ show = true, onComplete, zoom = 0.5, fallbackDuration = 6000 }: VideoLoadingProps) {
+export default function VideoLoading({ show = true, onComplete, zoom = 0.5, fallbackDuration = 1000 }: VideoLoadingProps) {
   const [visible, setVisible] = useState(show)
   const videoRef = useRef<HTMLVideoElement>(null)
 

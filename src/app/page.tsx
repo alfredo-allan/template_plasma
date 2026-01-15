@@ -17,23 +17,32 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
-      {/* SCROLL VIDEO (TOPO ABSOLUTO) */}
+    <main className="bg-black text-white overflow-x-hidden">
+      {/* 1️⃣ SCROLL FRAME ANIMATION */}
       <ScrollFrameAnimation />
 
-      {/* HERO */}
-      <Header />
+      {/* 2️⃣ HERO */}
+      <section className="relative z-10">
+        <Header />
+      </section>
 
-      {/* CLAIM */}
-      <section className="relative z-10 py-24 text-center bg-black mt-[-180vh] lg:mt-[-105vh]" />
+      {/* 3️⃣ CLAIM / RESPIRO */}
+      <section className="relative z-10 bg-black flex items-center justify-center h-[30svh] md:h-[60svh]">
+        {/* conteúdo do claim depois */}
+      </section>
 
-      {/* LOOP DE BRANDING / TECNOLOGIA */}
-      <DivisionBanner />
+      {/* 4️⃣ BRANDING LOOP */}
+      <section className="relative z-10">
+        <DivisionBanner />
+      </section>
 
-      {/* MEDIA + TEXTO INSTITUCIONAL */}
-      <PlasmaMediaSection />
+      {/* 5️⃣ MEDIA */}
+      <section className="relative z-10">
+        <PlasmaMediaSection />
+      </section>
 
+      {/* 6️⃣ FOOTER */}
       <Footer />
-    </div>
+    </main>
   )
 }
