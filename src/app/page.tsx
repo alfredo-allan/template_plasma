@@ -18,26 +18,26 @@ export default function Home() {
 
   return (
     <main className="bg-black text-white overflow-x-hidden">
-      {/* 1️⃣ SCROLL FRAME ANIMATION */}
-      <ScrollFrameAnimation />
+      {/* 1️⃣ SCROLL ZONE (isolada) */}
+      <section className="relative">
+        <ScrollFrameAnimation />
+      </section>
 
       {/* 2️⃣ HERO */}
       <section className="relative z-10">
         <Header />
       </section>
 
-      {/* 3️⃣ CLAIM / RESPIRO */}
-      <section className="relative z-10 bg-black flex items-center justify-center h-[30svh] md:h-[60svh]">
-        {/* conteúdo do claim depois */}
-      </section>
+      {/* 3️⃣ CLAIM */}
+      <section className="relative bg-black flex items-center justify-center h-[30svh] md:h-[60svh]">{/* conteúdo */}</section>
 
-      {/* 4️⃣ BRANDING LOOP */}
-      <section className="relative z-10">
+      {/* 4️⃣ BRANDING */}
+      <section className="relative">
         <DivisionBanner />
       </section>
 
       {/* 5️⃣ MEDIA */}
-      <section className="relative z-10">
+      <section className="relative">
         <PlasmaMediaSection />
       </section>
 

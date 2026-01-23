@@ -57,8 +57,7 @@ export default function VideoLoading({ show = true, onComplete, zoom = 0.5, fall
           w-[200px] h-[280px]
           sm:w-[240px] sm:h-[340px]
           md:w-[300px] md:h-[420px]
-          lg:w-[300px] lg:h-[420px]
-rounded-full        "
+          lg:w-[300px] lg:h-[420px]"
         style={{
           transform: `scale(${zoom})`,
           transformOrigin: 'center'
