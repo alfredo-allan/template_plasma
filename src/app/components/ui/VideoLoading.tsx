@@ -44,7 +44,7 @@ export default function VideoLoading({ show = true, onComplete, zoom = 0.5, fall
   if (!visible) return null
 
   return (
-    <div className="fixed inset-0 z-[9999] bg-black flex items-center justify-center">
+    <div className="fixed inset-0 z-9999 bg-black flex items-center justify-center">
       <video
         ref={videoRef}
         autoPlay
@@ -54,10 +54,10 @@ export default function VideoLoading({ show = true, onComplete, zoom = 0.5, fall
         onError={() => setTimeout(handleComplete, fallbackDuration)}
         className="
           object-contain
-          w-[200px] h-[280px]
-          sm:w-[240px] sm:h-[340px]
-          md:w-[300px] md:h-[420px]
-          lg:w-[300px] lg:h-[420px]"
+          w-70 h-90
+          sm:w-80 sm:h-105
+          md:w-95 md:h-125
+          lg:w-95 lg:h-125"
         style={{
           transform: `scale(${zoom})`,
           transformOrigin: 'center'
