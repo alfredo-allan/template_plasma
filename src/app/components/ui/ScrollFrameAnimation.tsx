@@ -10,31 +10,28 @@ gsap.registerPlugin(ScrollTrigger)
    CONFIG
 ============================== */
 const TOTAL_FRAMES = 240
-const MOBILE_BREAKPOINT = 768
+const DESKTOP_IMAGE_PATH = '/gif'
 
-const MOBILE_IMAGE_WIDTH = 960
-const MOBILE_IMAGE_HEIGHT = 540
-
-export default function ScrollCanvasSequence() {
+export default function ScrollFrameAnimation() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
+  /* ==============================
+     DESKTOP → GSAP CANVAS
+  ============================== */
   useEffect(() => {
+    if (window.innerWidth < 768) return
+
     const canvas = canvasRef.current
     const container = containerRef.current
     const ctx = canvas?.getContext('2d')
 
     if (!canvas || !ctx || !container) return
 
-    const isMobile = window.innerWidth < MOBILE_BREAKPOINT
-    const IMAGE_PATH = isMobile ? '/teste_redimensionamento' : '/gif'
-
     const images: HTMLImageElement[] = []
     const state = { frame: 0 }
 
-    /* ==============================
-       RESIZE
-    ============================== */
+    /* ---------- resize ---------- */
     const resize = () => {
       const dpr = window.devicePixelRatio || 1
       const vw = window.innerWidth
@@ -50,24 +47,20 @@ export default function ScrollCanvasSequence() {
       ScrollTrigger.refresh()
     }
 
-    /* ==============================
-       PRELOAD
-    ============================== */
+    /* ---------- preload ---------- */
     const preload = () => {
       images.length = 0
 
       for (let i = 1; i <= TOTAL_FRAMES; i++) {
         const img = new Image()
-        img.src = `${IMAGE_PATH}/ezgif-frame-${String(i).padStart(3, '0')}.jpg`
+        img.src = `${DESKTOP_IMAGE_PATH}/ezgif-frame-${String(i).padStart(3, '0')}.jpg`
         images.push(img)
       }
 
       images[0].onload = render
     }
 
-    /* ==============================
-       RENDER
-    ============================== */
+    /* ---------- render ---------- */
     const render = () => {
       const img = images[state.frame]
       if (!img || !img.complete) return
@@ -75,37 +68,22 @@ export default function ScrollCanvasSequence() {
       const vw = window.innerWidth
       const vh = window.innerHeight
 
-      const iw = isMobile ? MOBILE_IMAGE_WIDTH : img.width
-      const ih = isMobile ? MOBILE_IMAGE_HEIGHT : img.height
+      const scale = Math.max(vw / img.width, vh / img.height)
+      const w = img.width * scale
+      const h = img.height * scale
 
-      let scale: number
-
-      if (isMobile) {
-        const containScale = Math.min(vw / iw, vh / ih)
-        scale = containScale * 1.15
-      } else {
-        scale = Math.max(vw / iw, vh / ih)
-      }
-
-      const drawWidth = iw * scale
-      const drawHeight = ih * scale
-
-      const x = (vw - drawWidth) / 2
-      const y = isMobile ? 0 : (vh - drawHeight) / 2
+      const x = (vw - w) / 2
+      const y = (vh - h) / 2
 
       ctx.clearRect(0, 0, vw, vh)
-      ctx.drawImage(img, x, y, drawWidth, drawHeight)
+      ctx.drawImage(img, x, y, w, h)
     }
 
-    /* ==============================
-       SCROLL
-    ============================== */
-    const SCROLL_DISTANCE = TOTAL_FRAMES * 22
-
+    /* ---------- scroll ---------- */
     const trigger = ScrollTrigger.create({
       trigger: container,
       start: 'top top',
-      end: `+=${SCROLL_DISTANCE}`,
+      end: `+=${TOTAL_FRAMES * 22}`,
       scrub: true,
       pin: true,
       anticipatePin: 1,
@@ -127,21 +105,38 @@ export default function ScrollCanvasSequence() {
 
   return (
     <>
-      {/* SCROLL ANIMATION */}
-      <section ref={containerRef} className="relative w-full h-[200svh] bg-black overflow-hidden">
-        <canvas ref={canvasRef} className="block relative z-0" />
+      {/* ==============================
+          DESKTOP → SCROLL ANIMADO
+      ============================== */}
+      <section ref={containerRef} className="relative hidden md:block w-full h-[200svh] bg-black overflow-hidden isolation-isolate">
+        <canvas ref={canvasRef} className="absolute inset-0 z-0" />
 
-        {/* overlays */}
+        {/* MASK DESKTOP */}
         <div className="pointer-events-none absolute inset-0 z-10">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_45%,rgba(0,0,0,0.35)_100%)]" />
-          <div className="absolute inset-0 opacity-[0.08] mix-blend-overlay" style={{ backgroundImage: 'url(/noise.png)' }} />
+          <div className="absolute inset-0 bg-black/20" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0)_50%,rgba(0,0,0,0.45)_100%)]" />
+          <div className="absolute inset-0 opacity-[0.06] mix-blend-overlay" style={{ backgroundImage: 'url(/noise.png)' }} />
         </div>
       </section>
 
-      {/* MOBILE CONTENT FIX (SEM BURACO) */}
-      <section className="block md:hidden bg-black">
-        <img src="/mobile_banner_content_header.png" alt="Mobile content" className="w-full h-auto block" />
+      {/* ==============================
+          MOBILE → VIDEO TOPO REAL
+      ============================== */}
+      <section className="md:hidden fixed -mt-85.5 left-0 w-full h-svh bg-black z-0">
+        <video
+          src="/Create_a_smooth.mp4"
+          className="absolute top-0 left-0 w-full h-full object-contain z-0"
+          muted
+          playsInline
+          autoPlay
+          loop
+        />
       </section>
+
+      {/* ==============================
+          MOBILE SPACER (libera scroll)
+      ============================== */}
+      <div className="md:hidden h-svh" />
     </>
   )
 }

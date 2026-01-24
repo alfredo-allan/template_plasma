@@ -13,7 +13,7 @@ const logos = Array.from({ length: 12 }, () => BRAND_LOGO)
 
 export default function PlasmaVideoSection() {
   return (
-    <div className="relative h-[200px] w-full overflow-hidden bg-black">
+    <div className="relative h-50 w-full overflow-hidden bg-black top-[-170vh] z-40">
       <LogoLoop
         logos={logos}
         speed={220} // 🔥 mais velocidade

@@ -9,7 +9,7 @@ type PlasmaMediaSectionProps = {
 
 export default function PlasmaMediaSection({ reverse = false }: PlasmaMediaSectionProps) {
   return (
-    <section className="w-full bg-black">
+    <section className="w-full bg-black mt-[-175vh]">
       <div
         className="
           mx-auto

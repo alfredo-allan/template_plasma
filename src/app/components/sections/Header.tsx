@@ -25,7 +25,7 @@ export default function Header() {
   return (
     <header className="relative w-full h-screen">
       {/* BACKGROUND */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 -mt-[-1000px]">
         {/* DESKTOP */}
 
         {/* MOBILE */}
